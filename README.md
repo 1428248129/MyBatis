@@ -1,12 +1,12 @@
 # MyBatis
-用纯java启动
-# 启动目录：
+### 用纯java启动
+启动目录：
 untitled\src\main\java\Main.java
-# 增删改查目录：
+### 增删改查目录：
 untitled\src\main\java\com\mp\lei
-# mapper：
+### mapper：
 untitled\src\main\java\com\mp\Mapper\userMapper.java
-# 编写项目时
+### 编写项目时
   编写项目时数据库所用MySQL
   MySQL版本8.0
   项目中mysql连接数据库名为：mp
@@ -14,7 +14,7 @@ untitled\src\main\java\com\mp\Mapper\userMapper.java
   密码：000000
   端口号：3306
   连接网址：jdbc:mysql://localhost:3306/mp
-# 各依赖:
+### 各依赖:
 ```xml
  <dependencies>
 <!--    mybatis-->
