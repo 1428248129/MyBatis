@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+<!--               数据库的链接信息-->
+<!--                -->
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+<!--                数据库网址-->
+                <property name="url" value="jdbc:mysql://localhost:3306/mp"/>
+<!--                账号-->
+                <property name="username" value="root"/>
+<!--                密码-->
+                <property name="password" value="000000"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+<!--        指定当前sql映射文件（进行增删改查的sql文件）-->
+        <mapper resource="com/mp/Mapper/userMapper.xml"/>
+    </mappers>
+</configuration>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mp.Mapper.userMapper">
+    <!--    查询所有-->
+    <select id="select" resultType="com.mp.pojo.User">
+        SELECT * FROM tb_brand;
+    </select>
+
+<!--    查询单个-->
+<!--    花括号，意思是在接口调用xml时会传递参数，用#{实体类遍历}接收,也可以用${}
+${}:拼sql，会存在sql注入的问题
+#{}:自动替换为？，可以防止sql注入
+使用时机：只要传递参数就用#
+动态查询表（用变量传递来决定查询那个表）或不固定表、列时使用
+parameterType表示从接口传递过来的值的类型（可以不写）
+-->
+    <select id="selectById" parameterType="int" resultType="com.mp.pojo.User">
+        select *
+        from tb_brand where id = #{id};
+    </select>
+
+<!--    多条件查询=======================================================================-->
+<!--    status用的等值连接
+company_name和brand_name是模糊查询
+-->
+    <select id="dtjcx" resultType="com.mp.pojo.User">
+        select *
+        from tb_brand
+        where
+--             如果是等号则表示所有数据必须一样，like后面跟需要查找的数据则表示不需要一摸一样，有个大概
+            status  = #{status}
+        and company_name like #{company_name}
+        and brand_name like #{brand_name}
+
+    </select>
+<!--    动态查询-->
+    <!--*
+    if标签
+    意思是如果companyName这个变量不是空并且也不是空字符串我就执行，条件卸载tese里-->
+    <select id="dtcx" resultType="com.mp.pojo.User">
+         select * from tb_brand where 1=1
+    <if test="companyName != null and companyName != ''">
+        and company_name like CONCAT('%', #{companyName}, '%')
+    </if>
+    <if test="brandName != null and brandName != ''">
+        and brand_name like CONCAT('%', #{brandName}, '%')
+    </if>
+    </select>
+
+<!--    添加-->
+<!--    useGeneratedKeys通常是否，如果是true后面再加个keyProperty属性指向id将会返回id值-->
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_brand(brand_name,company_name,ordered,description,status)
+        values(#{brand_name},#{company_name},#{ordered},#{description},#{status})
+    </insert>
+
+<!--    修改-->
+    <update id="update">
+        update tb_brand
+        set brand_name = #{brand_name},
+            company_name = #{company_name},
+            ordered = #{ordered},
+            description = #{description},
+            status = #{status}
+        where id = #{id};
+    </update>
+<!--    动态修改-->
+    <update id="dtupdate">
+        update tb_brand
+        <if test="brand_name != null and brand_name != '' ">
+            set brand_name = #{brand_name},
+        </if>
+        <if test="company_name != null and company_name != ''">
+            company_name = #{company_name},
+        </if>
+        <if test="ordered != null and ordered != ''">
+            ordered = #{ordered},
+        </if>
+        <if test="description != null and description != ''">
+            description = #{description},
+        </if>
+        <if test="status != null and status!='' ">
+            status = #{status}
+        </if>
+        where id = #{id};
+    </update>
+
+<!--    删除-->
+    <delete id="delete">
+        delete from tb_brand where id = #{id};
+    </delete>
+
+<!--    批量删除
+foreach遍历标签
+collection表示遍历那个数组
+item遍历出来的每一个元素叫什么
+separator表示分隔符，如果删除多个id，id之间需要分隔符，加上这个关键字自动生成分隔符
+-->
+
+    <delete id="deleteById">
+        delete from tb_brand where id
+        in (
+--             mybatis会把数组参数变成一个map集合
+--             默认  array  =  数组
+--             所以根据默认，获取的数组名应该是array而不是传递过来的值
+--        第二种办法，在接口使用@Param("")注解来声明这里的占位符
+            <foreach collection="array" item="id" separator=",">
+                #{id}
+            </foreach>
+                                       )
+
+
+    </delete>
+
+</mapper>
